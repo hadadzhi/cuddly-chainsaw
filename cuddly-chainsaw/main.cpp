@@ -23,13 +23,21 @@ static_assert(fib<S32>(7)  == 13);
 static_assert(fib<S64>(50) == 12586269025);
 
 struct Foo {
-    int i;
-    explicit Foo(int i) : i{i} {}
-    bool operator==(const Foo& o) const { return i == o.i; }
+
+    explicit Foo(int i) : m_i{i} {}
+    
+    bool operator==(const Foo& o) const { return m_i == o.m_i; }
+
+    int i() const { return m_i; }
 
     struct Hash {
-        size_t operator()(const Foo& foo) const { return foo.i; }
+        size_t operator()(const Foo& foo) const { return foo.m_i; }
     };
+
+private:
+
+    int m_i;
+
 };
 
 int main() {
@@ -42,6 +50,6 @@ int main() {
     s.insert(Foo(3));
     
     for (const auto& foo : s) {
-        println(foo.i);
+        println(foo.i());
     }
 }
