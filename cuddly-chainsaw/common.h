@@ -54,9 +54,9 @@ void println(const T& t) { ::std::cout << t << "\n"; }
 
 // Prints arguments side-by-side, followed by endline
 template <typename Head, typename... Tail>
-void println(const Head& arg1, const Tail& ... rest) {
+void println(const Head& arg1, const Tail& ... args) {
     ::std::cout << arg1;
-    println(rest...);
+    println(args...);
 }
 
 // flushes output

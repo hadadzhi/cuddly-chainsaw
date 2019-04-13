@@ -69,5 +69,5 @@ int main() {
         println(f); // boost cheats with template expressions, so must time the output too, to force evaluation
     });
 
-    println(ns / 1000000, " ms");
+    println(ns / 1'000'000, " ms");
 }
