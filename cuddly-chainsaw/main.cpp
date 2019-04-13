@@ -1,14 +1,15 @@
 #include "common.h"
 
 template <typename TNum>
-constexpr TNum fib(S64 x) {
+constexpr
+TNum fib(S64 x) {
     TNum f_m1 = 0;
     TNum f    = 1;
     if (x < 1) { return f_m1; }
     while (x-- >= 2) {
         const TNum t = f + f_m1;
-        f_m1 = f;
-        f    = t;
+        f_m1 = std::move(f);
+        f    = std::move(t);
     }
     return f;
 }
@@ -25,7 +26,7 @@ static_assert(fib<S64>(50) == 12586269025);
 struct Foo {
 
     explicit Foo(int i) : m_i{i} {}
-    
+
     bool operator==(const Foo& o) const { return m_i == o.m_i; }
 
     int i() const { return m_i; }
@@ -48,7 +49,7 @@ int main() {
     s.insert(Foo(3));
     s.insert(Foo(2));
     s.insert(Foo(3));
-    
+
     for (const auto& foo : s) {
         println(foo.i());
     }
