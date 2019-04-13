@@ -1,4 +1,7 @@
+#include <boost/multiprecision/cpp_int.hpp>
+
 #include "common.h"
+#include "main.h"
 
 template <typename TNum>
 constexpr
@@ -7,9 +10,12 @@ TNum fib(S64 x) {
     TNum f    = 1;
     if (x < 1) { return f_m1; }
     while (x-- >= 2) {
-        const TNum t = f + f_m1;
-        f_m1 = std::move(f);
-        f    = std::move(t);
+        //const TNum t = f + f_m1;
+        //f_m1 = std::move(f);
+        //f    = std::move(t);
+        // swap and += is much faster for boost::multiprecision::cpp_int
+        swap(f_m1, f);
+        f += f_m1;
     }
     return f;
 }
@@ -41,7 +47,7 @@ private:
 
 };
 
-int main() {
+void frobnicate() {
     HashSet<Foo, Foo::Hash> s;
     s.insert(Foo(2));
     s.insert(Foo(3));
@@ -53,4 +59,15 @@ int main() {
     for (const auto& foo : s) {
         println(foo.i());
     }
+}
+
+int main() {
+    using cpp_int = boost::multiprecision::cpp_int;
+    
+    S64 ns = time([&]() {
+        const cpp_int f = fib<cpp_int>(1'000'000);
+        println(f); // boost cheats with template expressions, so must time the output too, to force evaluation
+    });
+
+    println(ns / 1000000, " ms");
 }
