@@ -1,7 +1,6 @@
 #include <boost/multiprecision/cpp_int.hpp>
 
 #include "common.h"
-#include "main.h"
 
 template <typename TNum>
 constexpr
