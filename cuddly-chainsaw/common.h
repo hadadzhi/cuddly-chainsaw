@@ -40,38 +40,36 @@ using DP = double;
 using EP = long double;
 
 // ascii char[]
-using Str = ::std::string;
+using Str = std::string;
 
-template <typename... P> using SortedMap = ::std::map<P...>;
-template <typename... P> using SortedSet = ::std::set<P...>;
-template <typename... P> using HashMap   = ::std::unordered_map<P...>;
-template <typename... P> using HashSet   = ::std::unordered_set<P...>;
-template <typename... P> using Vector    = ::std::vector<P...>;
-template <typename... P> using List      = ::std::list<P...>;
+template <typename... P> using SortedMap = std::map<P...>;
+template <typename... P> using SortedSet = std::set<P...>;
+template <typename... P> using HashMap   = std::unordered_map<P...>;
+template <typename... P> using HashSet   = std::unordered_set<P...>;
+template <typename... P> using Vector    = std::vector<P...>;
+template <typename... P> using List      = std::list<P...>;
 
 template <typename T>
-void println(const T& t) { ::std::cout << t << "\n"; }
+void println(const T& t) { std::cout << t << "\n"; }
 
 // Prints arguments side-by-side, followed by endline
 template <typename Head, typename... Tail>
 void println(const Head& arg1, const Tail& ... args) {
-    ::std::cout << arg1;
+    std::cout << arg1;
     println(args...);
 }
 
 // flushes output
-void println() { ::std::cout << std::endl; }
+void println() { std::cout << std::endl; }
 
-// Times an action
-// Action is a no-arg callable (return value is ignored)
 // Returns nanoseconds
-template<typename Action>
-S64 time(const Action& action) {
-    auto start = std::chrono::high_resolution_clock::now();
+template<typename TFunc, typename... TArg>
+S64 time(TFunc&& function, TArg&&... arguments) {
+    const auto start = std::chrono::high_resolution_clock::now();
 
-    action();
+    function(std::forward<TArg>(arguments)...);
 
-    auto end = std::chrono::high_resolution_clock::now();
+    const auto end = std::chrono::high_resolution_clock::now();
 
     return std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
 }
