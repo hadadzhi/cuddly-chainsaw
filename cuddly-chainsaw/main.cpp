@@ -60,13 +60,43 @@ void frobnicate() {
     }
 }
 
-int main() {
-    using cpp_int = boost::multiprecision::cpp_int;
-    
+template <typename TFunc, typename TArg>
+constexpr
+TArg iterate(TFunc&& f, TArg&& x0, U64 n, bool print = false) {
+    if (print) {
+        println(x0);
+    }
+    if (n > 0) {
+        return iterate(f, f(std::forward<TArg>(x0)), n - 1, print);
+    }
+    return x0;
+}
+
+using cpp_int = boost::multiprecision::cpp_int;
+
+void TestFibonacci() {
     S64 ns = time([&]() {
         const cpp_int f = fib<cpp_int>(1'000'000);
         println(f); // boost cheats with template expressions, so must time the output too, to force evaluation
     });
 
     println(ns / 1'000'000, " ms");
+}
+
+void TestIterate() {
+    S64 ns = time([]() {
+        iterate(
+            [](const cpp_int& x) { return 2*x + 1; },
+            cpp_int(0),
+            1000,
+            true
+        );
+    });
+
+    println(ns / 1'000'000, " ms");
+}
+
+int main() {
+    //TestFibonacci();
+    TestIterate();
 }

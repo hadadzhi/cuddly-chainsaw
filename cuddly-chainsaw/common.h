@@ -63,7 +63,7 @@ void println(const Head& arg1, const Tail& ... args) {
 void println() { std::cout << std::endl; }
 
 // Returns nanoseconds
-template<typename TFunc, typename... TArg>
+template <typename TFunc, typename... TArg>
 S64 time(TFunc&& function, TArg&&... arguments) {
     const auto start = std::chrono::high_resolution_clock::now();
 
